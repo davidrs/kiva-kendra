@@ -31,8 +31,8 @@ factory('Loans', ['$resource', '$http', function($resource, $http) {
       if(request === null || page < 5){
         request = $http({
          method: 'GET',
-         url: 'recent/search.json',
-         // url: 'http://api.kivaws.org/v1/loans/search.json',
+         // url: 'recent/search.json',
+         url: 'http://api.kivaws.org/v1/loans/search.json',
          params:{
           page: page,
           per_page:50,
