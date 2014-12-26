@@ -1,0 +1,11 @@
+<div class="container">
+  <h3>Recent Listings</h3>
+  <div>
+    <div style="min-height:180px;" class="well col-md-3 col-md-offset-1" ng-repeat="loan in loans | orderBy:orderProp ">
+      <h4>{{loan.name}}, {{loan.loan_amount | currency:"$":0 }}</h4>
+      <p>{{loan.location.country}}, {{loan.location.town}}</p>
+      <p>{{loan.activity}}, {{loan.sector}}</p>
+      <span class="pull-right small">partner {{loan.partner_id}}</span>
+    </div>
+  </div>
+</div>
