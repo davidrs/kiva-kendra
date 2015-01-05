@@ -1,5 +1,5 @@
 <div class="container">
-  <h3>Recent Listings</h3>
+  <h3>List View</h3>
   <div>
     <div style="min-height:180px;" class="well col-md-3 col-md-offset-1" ng-repeat="loan in loans | orderBy:orderProp ">
       <h4><a target="_open" href="http://www.kiva.org/lend/{{loan.id}}">{{loan.name}}, {{loan.loan_amount | currency:"$":0 }}</a></h4>
