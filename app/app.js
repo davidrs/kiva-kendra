@@ -1,5 +1,9 @@
 'use strict';
 
+var KENDRA_REGIONS = ['AL','AM','AZ','GE','MD','MN','KG','TJ','UA', 'XK'].join(',');
+
+
+
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
   'ngRoute',
@@ -12,11 +16,38 @@ config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/recent'});
 
   console.log('start!');
-
+//
 //http://api.kivaws.org/v1/partners.json
 }]).
+factory('Countries', ['$rootScope','$resource', '$http', function($rootScope, $resource, $http) {
+  var aryOfCountries = [];
+  var request = null;
+
+  return {
+    getCountries: function(){
+      var self = this;
+
+      if(request === null){
+        request = $http({
+          method: 'GET',
+         // url: 'mocks/countries.json',
+          url: 'http://api.geonames.org/countryInfoJSON',
+          params:{
+            username: 'demo',
+            country: KENDRA_REGIONS
+          }
+        }).then(function(response){
+          aryOfCountries =  response.data.geonames;
+          return aryOfCountries;
+        });
+      }
+
+      return request;
+    }
+  };
+
+}]).
 factory('Loans', ['$rootScope','$resource', '$http', function($rootScope, $resource, $http) {
-  var KENDRA_REGIONS = ['AL','AM','AZ','GE','MD','MN','KG','TJ','UA', 'XK'].join(',');
   var PAGE_SIZE = 200;
 
   var aryOfLoans = [];
@@ -49,8 +80,8 @@ factory('Loans', ['$rootScope','$resource', '$http', function($rootScope, $resou
       if(request === null || currentPage < targetPage){
         request = $http({
           method: 'GET',
-          url: 'recent/search.json',
-         // url: 'http://api.kivaws.org/v1/loans/search.json',
+          // url: 'mocks/search.json',
+         url: 'http://api.kivaws.org/v1/loans/search.json',
           params:{
             page: currentPage,
             per_page: PAGE_SIZE,
