@@ -49,8 +49,8 @@ factory('Loans', ['$rootScope','$resource', '$http', function($rootScope, $resou
       if(request === null || currentPage < targetPage){
         request = $http({
           method: 'GET',
-          // url: 'recent/search.json',
-         url: 'http://api.kivaws.org/v1/loans/search.json',
+          url: 'recent/search.json',
+         // url: 'http://api.kivaws.org/v1/loans/search.json',
           params:{
             page: currentPage,
             per_page: PAGE_SIZE,
