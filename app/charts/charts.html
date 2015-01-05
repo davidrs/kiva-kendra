@@ -1,11 +1,31 @@
-<div style="width:900px; height:400px"
-ac-chart="chartType" ac-data="data" ac-config="config" id='chart' class='chart'></div>
-<br />
-<div style="width:900px; height:400px"
-ac-chart="chartType" ac-data="data2" ac-config="config2" id='chart2' class='chart'></div>
-<br />
-<div style="width:900px; height:400px"
-ac-chart="chartType" ac-data="data3" ac-config="config3" id='chart3' class='chart'></div>
-<br />
-<div style="width:900px; height:400px"
-ac-chart="chartType" ac-data="data4" ac-config="config4" id='chart4' class='chart'></div>
+<div class="container">
+ 
+<h4>Chart of 200 sorted by:
+  <select ng-model="selectedSort" ng-options="sort for sort in sortOptions" ng-change="search()">
+  </select>
+  <span  ng-show="fetching" class="label label-info">
+    Loading...
+  </span>
+</h4>
+
+  <div style="width:900px; height:400px"
+  ac-chart="chartType" ac-data="data[0]" ac-config="config[0]" id='chart' class='chart'></div>
+  <br />
+  <div style="width:900px; height:400px"
+  ac-chart="chartType" ac-data="data[1]" ac-config="config[1]" id='chart2' class='chart'></div>
+  <br />
+  <div style="width:900px; height:400px"
+  ac-chart="chartType" ac-data="data[2]" ac-config="config[2]" id='chart3' class='chart'></div>
+  <br />
+  <div style="width:900px; height:400px"
+  ac-chart="chartType" ac-data="data[3]" ac-config="config[3]" id='chart4' class='chart'></div>
+  <br />
+  <div style="width:900px; height:400px"
+  ac-chart="chartType" ac-data="data[4]" ac-config="config[4]" id='chart5' class='chart'></div>
+  <br />
+  <div style="width:450px; height:400px"
+  ac-chart="chartType" ac-data="data[5]" ac-config="config[5]" class='chart pull-left'></div>
+  <div style="width:450px; height:400px"
+  ac-chart="chartType" ac-data="data[6]" ac-config="config[6]" class='chart pull-left'></div>
+
+</div>
