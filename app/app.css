@@ -1,4 +1,7 @@
 /* app css stylesheet */
+body{
+  padding-top: 70px;
+}
 
 .menu {
   list-style: none;
@@ -27,4 +30,9 @@
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
+}
+
+.settings {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }

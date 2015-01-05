@@ -1,13 +1,4 @@
 <div class="">
- 
-<h4>Chart of 200 loans sorted by:
-  <select ng-model="selectedSort" ng-options="sort for sort in sortOptions" ng-change="search()">
-  </select>
-  <span  ng-show="fetching" class="label label-info">
-    Loading...
-  </span>
-</h4>
-
   <div style="width:900px; height:400px"
   ac-chart="chartType" ac-data="data[0]" ac-config="config[0]" id='chart' class='chart'></div>
   <br />

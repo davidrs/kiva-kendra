@@ -1,0 +1,7 @@
+ <span ng-controller="SettingsController as settingsCtrl">200 loans sorted by:
+  <select ng-model="selectedSort" ng-options="sort for sort in sortOptions" ng-change="search()">
+  </select>
+  <span  ng-show="fetching" class="label label-info">
+    Loading...
+  </span>
+</span>

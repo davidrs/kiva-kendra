@@ -14,7 +14,7 @@ var chartSettings = [{
     yValues: [ 'loan_amount', 'funded_amount']
   },{
     value: 'loan_amount',
-    yValues: [ 'loan_amount', 'funded_amount']
+    yValues: [ 'borrower_count']
   },{
     value: 'borrower_count',
     yValues: [ 'loan_amount', 'funded_amount']
@@ -36,49 +36,28 @@ angular.module('myApp.charts', ['ngRoute','myApp.recent','angularCharts'])
 .controller('ChartsCtrl',['$scope', 'Loans', function($scope, Loans) {
     $scope.data = [];
     $scope.config = [];
+    $scope.loans = Loans.aryOfLoans;
+    $scope.chartType = 'bar';
 
-    $scope.selectedSort = 'newest';
-    $scope.sortOptions = ['newest', 'popularity', 'loan_amount', 'expiration', 'oldest', 'amount_remaining', 'repayment_term', 'random'];
+    $scope.$on('loans:updated', function(event,data) {
+      $scope.loans = data;
+      drawCharts($scope);
+    });
 
-    $scope.search = function(){
-      $scope.fetching = true;
-      Loans.getNewLoans($scope.selectedSort).then(function(loans) {
-        var dateRange = getDateRange(loans);
-
-        _(chartSettings).each(function(chartSetting, k){
-          $scope.data[k] = convertLoansToPieChartData(loans, chartSetting.value, chartSetting.yValues);
-
-          $scope.config[k] = _.clone(baseConfig);
-          $scope.config[k].title =  chartSetting.value + " " + dateRange.min +" to " + dateRange.max;
-          $scope.fetching = false;
-        });
-      });
-
-      $scope.chartType = 'bar';
-
-      var baseConfig = {
-        title: 'Recent Loan Listings', // chart title
-        tooltips: true,
-        labels: false, // labels on data points
-        // legend config
-        legend: {
-          display: true, // can be either 'left' or 'right'.
-          position: 'right',
-        },
-        // override this array if you're not happy with default colors
-        colors: [],
-        innerRadius: 10,        // Only on pie Charts
-        lineLegend: 'lineEnd',  // Only on line Charts
-        lineCurveType: 'cardinal', // change this as per d3 guidelines to avoid smoothline
-        isAnimate: false,        // run animations while rendering chart
-        yAxisTickFormat: 's', //refer tickFormats in d3 to edit this value
-        xAxisMaxTicks: 7 // Optional: maximum number of X axis ticks to show if data points exceed this number
-      };
-    };
-
-    $scope.search();
-
+    drawCharts($scope);
 }]);
+
+var drawCharts = function($scope){
+  var dateRange = getDateRange($scope.loans);
+
+  _(chartSettings).each(function(chartSetting, k){
+    $scope.data[k] = convertLoansToPieChartData($scope.loans, chartSetting.value, chartSetting.yValues);
+
+    $scope.config[k] = _.clone(baseConfig);
+    $scope.config[k].title =  chartSetting.value + " " + dateRange.min +" to " + dateRange.max;
+  });
+
+};
 
 var getDateRange = function(loans){
   var dateRange = {min:null, max: null};
@@ -99,6 +78,10 @@ var convertLoansToPieChartData = function(data, xKey, yKeys){
     series: yKeys,
     data: []
   };
+
+  if(!data.length){
+    return formattedData;
+  }
 
   // Aggregate to yKey to xKey.
   if(data[0][xKey] && typeof data[0][xKey] !=  'object'){
@@ -136,3 +119,22 @@ var convertLoansToPieChartData = function(data, xKey, yKeys){
   return formattedData;
 };
 
+
+    var baseConfig = {
+      title: 'Recent Loan Listings', // chart title
+      tooltips: true,
+      labels: false, // labels on data points
+      // legend config
+      legend: {
+        display: true, // can be either 'left' or 'right'.
+        position: 'right',
+      },
+      // override this array if you're not happy with default colors
+      colors: [],
+      innerRadius: 10,        // Only on pie Charts
+      lineLegend: 'lineEnd',  // Only on line Charts
+      lineCurveType: 'cardinal', // change this as per d3 guidelines to avoid smoothline
+      isAnimate: false,        // run animations while rendering chart
+      yAxisTickFormat: 's', //refer tickFormats in d3 to edit this value
+      xAxisMaxTicks: 7 // Optional: maximum number of X axis ticks to show if data points exceed this number
+    };

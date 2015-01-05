@@ -15,10 +15,14 @@ angular.module('myApp.recent', ['ngRoute', 'ngResource'])
     $scope.loans = loans;
   });
 
+  $scope.$on('loans:updated', function(event,data) {
+    $scope.loans = data;
+  });
+
   $scope.orderProp = 'loan_amount';
 
 }]).
-factory('Loans', ['$resource', '$http', function($resource, $http) {
+factory('Loans', ['$rootScope','$resource', '$http', function($rootScope, $resource, $http) {
   var KENDRA_REGIONS = ['AL','AM','AZ','GE','MD','MN','KG','TJ','UA', 'XK'].join(',');
   var PAGE_SIZE = 200;
 
@@ -30,7 +34,7 @@ factory('Loans', ['$resource', '$http', function($resource, $http) {
 //
 //http://api.kivaws.org/v1/partners.json
   return {
-
+    aryOfLoans: aryOfLoans,
     //Force fresh get.
     getNewLoans: function(sort){
       request = null;
@@ -46,13 +50,14 @@ factory('Loans', ['$resource', '$http', function($resource, $http) {
     },
 
     getLoans: function(sort){
+      var self = this;
       sort = sort || 'newest';
 
       if(request === null || currentPage < targetPage){
         request = $http({
           method: 'GET',
-          // url: 'recent/search.json',
-         url: 'http://api.kivaws.org/v1/loans/search.json',
+          url: 'recent/search.json',
+         // url: 'http://api.kivaws.org/v1/loans/search.json',
           params:{
             page: currentPage,
             per_page: PAGE_SIZE,
@@ -68,6 +73,10 @@ factory('Loans', ['$resource', '$http', function($resource, $http) {
           currentPage++;
 
           aryOfLoans = aryOfLoans.concat(response.data.loans);
+          self.aryOfLoans = aryOfLoans;
+
+          // notify listeners and provide the data that changed [optional]
+          $rootScope.$broadcast('loans:updated',aryOfLoans);
           return aryOfLoans;
         });
       }
