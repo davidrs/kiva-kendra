@@ -49,7 +49,7 @@ angular.module('myApp.charts', ['ngRoute','myApp.recent','angularCharts'])
           $scope.data[k] = convertLoansToPieChartData(loans, chartSetting.value, chartSetting.yValues);
 
           $scope.config[k] = _.clone(baseConfig);
-          $scope.config[k].title =  chartSetting.value + " from: " + dateRange.min +" to " + dateRange.max;
+          $scope.config[k].title =  chartSetting.value + " " + dateRange.min +" to " + dateRange.max;
           $scope.fetching = false;
         });
       });
